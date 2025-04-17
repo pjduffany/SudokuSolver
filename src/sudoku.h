@@ -10,6 +10,13 @@ extern int UNSOLVED;
 extern int SIZE_ROWS;
 extern int SIZE_COLS;
 
+typedef struct Sudoku
+{
+  struct Square *** squares;
+  struct Box ** boxes;
+} Sudoku;
+
+
 typedef struct Box
 {
     struct Square ** squares;
@@ -28,5 +35,11 @@ typedef struct Square
     int row, column;
 } Square;
 
-int** createPuzzle();
+int ** createPuzzle();
+Sudoku * createSudoku(Square *** squares, Box ** boxes);
+int updateSudoku(Square *** sudoku, int row, int col);
+void printPuzzle(Square *** puzzle);
+void printPuzzleTest(int ** puzzle);
+Sudoku * setPuzzle(int ** puzzle);
+int checkPuzzle(Square *** squares, Box **  boxes);
 #endif //SUDOKU_SOLVER_SUDOKU_H
