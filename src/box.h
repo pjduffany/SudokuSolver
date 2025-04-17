@@ -4,7 +4,10 @@
 
 #ifndef SUDOKU_SOLVER_BOX_H
 #define SUDOKU_SOLVER_BOX_H
+#include "sudoku.h"
 
-int createBoxes();
 
+
+Box ** createBoxes();
+int updateBoxes(Square *** sudoku, int row, int col);
 #endif //SUDOKU_SOLVER_BOX_H

@@ -13,10 +13,10 @@ extern int SIZE_COLS;
 typedef struct Box
 {
     struct Square ** squares;
+    struct Box * next;
     int numbers;
     int possible[9];
     int solvable;
-    struct Box * next;
 } Box;
 
 typedef struct Square
