@@ -6,8 +6,6 @@
 #define SUDOKU_SOLVER_BOX_H
 #include "sudoku.h"
 
-
-
 Box ** createBoxes();
 int boxSingle(Square *** squares, Box ** boxes);
 int updateBoxes(Square *** sudoku, int row, int col);

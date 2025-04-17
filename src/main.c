@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "puzzle.h"
 #include "sudoku.h"
 
 int UNSOLVED = 81;

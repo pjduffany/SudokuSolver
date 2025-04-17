@@ -4,7 +4,6 @@
 
 #include "box.h"
 #include "sudoku.h"
-#include "puzzle.h"
 #include <stdlib.h>
 
 int boxSingle(Square *** squares, Box ** boxes)
