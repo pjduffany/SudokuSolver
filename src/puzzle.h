@@ -6,9 +6,10 @@
 #ifndef SUDOKU_SOLVER_PUZZLE_H
 #define SUDOKU_SOLVER_PUZZLE_H
 int ** createPuzzle();
+Sudoku * createSudoku(Square *** squares, Box ** boxes);
 int updateSudoku(Square *** sudoku, int row, int col);
 void printPuzzle(Square *** puzzle);
 void printPuzzleTest(int ** puzzle);
-Square *** setPuzzle(int ** puzzle);
-int checkPuzzle(Square *** sudoku);
+Sudoku * setPuzzle(int ** puzzle);
+int checkPuzzle(Square *** squares, Box **  boxes);
 #endif //SUDOKU_SOLVER_PUZZLE_H

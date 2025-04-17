@@ -8,27 +8,24 @@ int SIZE_COLS = 9;
 
 int main() {
     int** puzzle = createPuzzle();
-    //printPuzzleTest(puzzle);
+    int solved = 0;
 
-    Square *** sudoku = setPuzzle(puzzle);
-    printPuzzle(sudoku);
+    Sudoku * sudoku = setPuzzle(puzzle);
+    printPuzzle(sudoku -> squares);
 
-    checkPuzzle(sudoku);
+    while (UNSOLVED > 0)
+    {
+        solved = checkPuzzle(sudoku->squares, sudoku -> boxes);
+
+        if (solved == 0)
+        {
+            printf("Failed to solve puzzle...\n");
+            break;
+        }
+    }
+
     printf("\n\n");
-    printPuzzle(sudoku);
-
-    checkPuzzle(sudoku);
-    printf("\n\n");
-    printPuzzle(sudoku);
-
-    checkPuzzle(sudoku);
-    printf("\n\n");
-    printPuzzle(sudoku);
-
-    checkPuzzle(sudoku);
-    printf("\n\n");
-    printPuzzle(sudoku);
-
+    printPuzzle(sudoku -> squares);
 
     return 0;
 }

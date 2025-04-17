@@ -4,7 +4,53 @@
 
 #include "box.h"
 #include "sudoku.h"
+#include "puzzle.h"
 #include <stdlib.h>
+
+int boxSingle(Square *** squares, Box ** boxes)
+{
+
+    //loop through boxes
+    for(int i = 0; i < 9; i++)
+    {
+        // loop through possible values
+        for (int j = 0; j < 9; j++)
+        {
+            int count = 0;
+            int temp = 0;
+            // loop through squares
+            for (int k = 0; k < 9; k++)
+            {
+               if (boxes[i] -> squares[k] != 0)
+               {
+                   continue;
+               }
+               // found possible solution for val
+               if (boxes[i] -> squares[k] -> possible[j] == 0)
+               {
+                   count++;
+                   temp = k;
+               }
+               // current square is unsolvable
+               if (count > 1)
+               {
+                    break;
+               }
+            }
+            // found solution for square
+            if (count == 1)
+            {
+                boxes[i] -> squares[temp] -> number = j + 1;
+                boxes[i] -> squares[temp] -> solvable = 0;
+                UNSOLVED--;
+                updateSudoku(squares, boxes[i] -> squares[temp] -> row, boxes[i] -> squares[temp] -> column);
+                return 1;
+            }
+
+        }
+    }
+    return 0;
+}
 
 Box ** createBoxes()
 {

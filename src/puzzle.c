@@ -7,22 +7,42 @@
 #include "square.h"
 #include "box.h"
 
+Sudoku * createSudoku(Square *** squares, Box ** boxes)
+{
+    Sudoku  * sudoku = malloc(sizeof(Sudoku));
+    sudoku -> squares = squares;
+    sudoku -> boxes = boxes;
+
+    return sudoku;
+}
+
+
+
 int updateSudoku(Square *** sudoku, int row, int col)
 {
     int number = sudoku[row][col] -> number;
 
-    for(int x = 0; x < SIZE_ROWS; x++)
+    for (int x = 0; x < SIZE_ROWS; x++)
     {
-        if (sudoku[x][col] -> possible[number - 1] == 0)
+        if (sudoku[row][x]->possible[number - 1] == 0)
         {
-            sudoku[x][col] -> solvable--;
+            sudoku[x][col]->solvable--;
         }
-        sudoku[x][col] -> possible[number - 1] = 1;
+        sudoku[x][col]->possible[number -1] = 1;
+    }
+
+    for (int y = 0; y < SIZE_COLS; y++)
+    {
+        if (sudoku[row][y]->possible[number - 1] == 0)
+        {
+            sudoku[row][y]->solvable--;
+        }
+        sudoku[row][y]->possible[number -1] = 1;
     }
     return 1;
 }
 
-int checkPuzzle(Square *** sudoku)
+int checkPuzzle(Square *** sudoku, Box ** boxes)
 {
     for (int x = 0; x < SIZE_ROWS; x++)
     {
@@ -32,18 +52,17 @@ int checkPuzzle(Square *** sudoku)
             {
                 solveSquare(sudoku[x][y]);
                 updateSudoku(sudoku, x, y);
+                updateBoxes(sudoku, x, y);
+
+                return 1;
             }
         }
     }
-    return 1;
+    return boxSingle(sudoku , boxes);
 }
 
-void checkValues(Square *** sudoku)
-{
 
-}
-
-Square *** setPuzzle(int ** puzzle)
+Sudoku * setPuzzle(int ** puzzle)
 {
     // allocate space for the Square & boxes structs
     Square *** sudoku = (Square***)malloc(sizeof(Square**)*9);
@@ -92,7 +111,7 @@ Square *** setPuzzle(int ** puzzle)
         }
 
     }
-    checkValues(sudoku);
+
     for(int x = 0; x < SIZE_ROWS; x++)
     {
         for (int y = 0; y < SIZE_COLS; y++)
@@ -106,7 +125,7 @@ Square *** setPuzzle(int ** puzzle)
             }
         }
     }
-    return sudoku;
+    return createSudoku(sudoku, boxes);
 }
 
 int** createPuzzle()

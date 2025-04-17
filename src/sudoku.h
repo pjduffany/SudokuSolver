@@ -10,6 +10,13 @@ extern int UNSOLVED;
 extern int SIZE_ROWS;
 extern int SIZE_COLS;
 
+typedef struct Sudoku
+{
+  struct Square *** squares;
+  struct Box ** boxes;
+} Sudoku;
+
+
 typedef struct Box
 {
     struct Square ** squares;
