@@ -26,7 +26,7 @@ int updateSudoku(Square *** sudoku, int row, int col)
 
     for (int x = 0; x < SIZE_ROWS; x++)
     {
-        if (sudoku[row][x]->possible[number - 1] == 0)
+        if (sudoku[x][col]->possible[number - 1] == 0)
         {
             sudoku[x][col]->solvable--;
         }
