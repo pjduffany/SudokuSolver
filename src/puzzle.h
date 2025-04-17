@@ -8,6 +8,7 @@
 int ** createPuzzle();
 int updateSudoku(Square *** sudoku, int row, int col);
 void printPuzzle(Square *** puzzle);
+void printPuzzleTest(int ** puzzle);
 Square *** setPuzzle(int ** puzzle);
 int checkPuzzle(Square *** sudoku);
 #endif //SUDOKU_SOLVER_PUZZLE_H
