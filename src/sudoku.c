@@ -1,13 +1,13 @@
-#include <stdlib.h>
 //
 // Created by Patrick Duffany on 4/3/25.
 //
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "sudoku.h"
 #include "square.h"
 #include "box.h"
+#include "row.h"
 
 Sudoku * createSudoku(Square *** squares, Box ** boxes)
 {
@@ -17,8 +17,6 @@ Sudoku * createSudoku(Square *** squares, Box ** boxes)
 
     return sudoku;
 }
-
-
 
 int updateSudoku(Square *** sudoku, int row, int col)
 {
@@ -60,9 +58,28 @@ int checkPuzzle(Square *** sudoku, Box ** boxes)
             }
         }
     }
-    return boxSingle(sudoku , boxes);
+    if (checkBoxes(sudoku , boxes))
+        return 1;
+
+    return checkRows(sudoku, boxes);
 }
 
+void updateValues(Square *** sudoku)
+{
+    for(int x = 0; x < SIZE_ROWS; x++)
+    {
+        for (int y = 0; y < SIZE_COLS; y++)
+        {
+            if (sudoku != NULL && sudoku[x][y] -> number !=  0)
+            {
+                sudoku[x][y] -> solvable = 0;
+                updateSudoku(sudoku, x, y);
+                updateBoxes(sudoku, x, y);
+                UNSOLVED--;
+            }
+        }
+    }
+}
 
 Sudoku * setPuzzle(int ** puzzle)
 {
@@ -96,7 +113,6 @@ Sudoku * setPuzzle(int ** puzzle)
             {
                 sudoku[x][y] -> possible[z] = 0;
             }
-
             if (y == 2 || y == 5)
             {
                 currentBox++;
@@ -111,51 +127,9 @@ Sudoku * setPuzzle(int ** puzzle)
         {
             currentBox = 6;
         }
-
     }
-
-    for(int x = 0; x < SIZE_ROWS; x++)
-    {
-        for (int y = 0; y < SIZE_COLS; y++)
-        {
-            if (sudoku[x][y] -> number !=  0)
-            {
-                sudoku[x][y] -> solvable = 0;
-                updateSudoku(sudoku, x, y);
-                updateBoxes(sudoku, x, y);
-                UNSOLVED--;
-            }
-        }
-    }
+    updateValues(sudoku);
     return createSudoku(sudoku, boxes);
-}
-
-int** createPuzzle()
-{
-    int** puzzle;
-    int array[9][9] = {0, 1, 9,  8, 0, 2,  0, 0, 0,
-                       4, 7,  0,  6, 9, 0,  0, 0, 1,
-                       0, 0, 0,  4, 0, 0,  0, 9, 0,
-
-                       8, 9, 4,  5, 0, 7,  0, 0, 0,
-                       0, 0, 0,  0, 0, 0,  0, 0, 0,
-                       0, 0, 0,  2, 0, 1,  9, 5, 8,
-
-                       0, 5, 0,  7, 0, 6,  0, 0, 0,
-                       6, 0, 0,  3, 2, 8,  0, 7, 9,
-                       0, 0, 0,  1, 0, 0,  8, 6, 0};
-
-    puzzle = (int**) malloc(sizeof (int*)*9);
-
-    for (int x = 0; x < SIZE_ROWS; x++)
-    {
-        puzzle[x] = (int*) malloc(sizeof(int)*9);
-        for (int y = 0; y < SIZE_COLS; y++)
-        {
-            puzzle[x][y] = array[x][y];
-        }
-    }
-    return puzzle;
 }
 
 void printPuzzle(Square *** puzzle)

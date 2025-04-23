@@ -5,7 +5,7 @@
 #include "square.h"
 #include "sudoku.h"
 
-int solveSquare(Square * square)
+void solveSquare(Square * square)
 {
     for (int x = 0; x < SIZE_ROWS; x++)
     {

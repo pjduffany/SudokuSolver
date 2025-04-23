@@ -20,7 +20,6 @@ typedef struct Sudoku
 typedef struct Box
 {
     struct Square ** squares;
-    struct Box * next;
     int numbers;
     int possible[9];
     int solvable;
@@ -35,8 +34,9 @@ typedef struct Square
     int row, column;
 } Square;
 
+
+int ** generatePuzzle();
 int ** createPuzzle();
-Sudoku * createSudoku(Square *** squares, Box ** boxes);
 int updateSudoku(Square *** sudoku, int row, int col);
 void printPuzzle(Square *** puzzle);
 void printPuzzleTest(int ** puzzle);

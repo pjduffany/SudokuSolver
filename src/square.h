@@ -7,6 +7,6 @@
 
 #include "sudoku.h"
 
-int solveSquare(Square * square);
+void solveSquare(Square * square);
 
 #endif //SUDOKU_SOLVER_SQUARE_H

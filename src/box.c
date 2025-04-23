@@ -6,9 +6,8 @@
 #include "sudoku.h"
 #include <stdlib.h>
 
-int boxSingle(Square *** squares, Box ** boxes)
+int checkBoxes(Square *** squares, Box ** boxes)
 {
-
     //loop through boxes
     for(int i = 0; i < 9; i++)
     {
@@ -21,9 +20,7 @@ int boxSingle(Square *** squares, Box ** boxes)
             for (int k = 0; k < 9; k++)
             {
                if (boxes[i] -> squares[k] != 0)
-               {
                    continue;
-               }
                // found possible solution for val
                if (boxes[i] -> squares[k] -> possible[j] == 0)
                {
@@ -32,9 +29,7 @@ int boxSingle(Square *** squares, Box ** boxes)
                }
                // current square is unsolvable
                if (count > 1)
-               {
                     break;
-               }
             }
             // found solution for square
             if (count == 1)
@@ -45,7 +40,6 @@ int boxSingle(Square *** squares, Box ** boxes)
                 updateSudoku(squares, boxes[i] -> squares[temp] -> row, boxes[i] -> squares[temp] -> column);
                 return 1;
             }
-
         }
     }
     return 0;
@@ -68,7 +62,7 @@ Box ** createBoxes()
     return box;
 }
 
-int updateBoxes(Square *** sudoku, int row, int col)
+void updateBoxes(Square *** sudoku, int row, int col)
 {
     Box * box = sudoku[row][col] -> box;
     int num = sudoku[row][col] -> number;

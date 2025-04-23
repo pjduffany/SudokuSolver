@@ -7,6 +7,7 @@
 #include "sudoku.h"
 
 Box ** createBoxes();
-int boxSingle(Square *** squares, Box ** boxes);
-int updateBoxes(Square *** sudoku, int row, int col);
+int checkBoxes(Square *** squares, Box ** boxes);
+void updateBoxes(Square *** sudoku, int row, int col);
+
 #endif //SUDOKU_SOLVER_BOX_H
