@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "helper.h"
 #include "sudoku.h"
 
 int UNSOLVED = 81;
@@ -9,46 +8,46 @@ int SIZE_ROWS = 9;
 int SIZE_COLS = 9;
 
 int main() {
-    int ** puzzle = (int**) malloc(sizeof (int*)*9);
+    // allocate mem for sudoku
+    Square *** sudoku = (Square***)malloc(sizeof(Square**)*9);
     srand(time(0));
 
     for (int i = 0; i < 9; i++)
     {
-        puzzle[i] = (int*) malloc(sizeof(int)*9);
+        // allocate mem for rows
+        sudoku[i] = (Square**)malloc(sizeof(Square*)*9);
 
         for (int j = 0; j < 9; j++)
         {
-            puzzle[i][j] = 0;
+            // allocate mem for cols
+            sudoku[i][j] = (Square*)malloc(sizeof(Square));
+
+            // initialize numbers to 0
+            sudoku[i][j] -> number = 0;
         }
     }
+
     for (int i = 0; i < 9; i += 3) {
-        fillBox(i, i, puzzle);
+        // fill boxes diagonally
+        fillBox(i, i, sudoku);
     }
 
-    fillPuzzle(puzzle, 0, 0);
-    printf("Solution to puzzle: \\n\\n");
-    printPuzzleTest(puzzle);
-    printf("\n\n");
-    removeValues(puzzle);
-    Sudoku * sudoku = setPuzzle(puzzle);
-    printf("Empty puzzle: \n\n");
+    // fill the puzzle using backtracking
+    fillPuzzle(sudoku, 0, 0);
 
-    printPuzzle(sudoku -> squares);
+    // remove random values from the puzzle
+    removeValues(sudoku);
+    printf("Empty puzzle: \n");
 
-    int progress;
-    while (UNSOLVED > 0)
-    {
-        progress = checkPuzzle(sudoku->squares, sudoku->boxes);
+    printPuzzle(sudoku);
 
-        if (progress == 0)
-        {
-            printf("\nFailed to solve the puzzle!");
-            break;
-        }
+    if ( fillPuzzle(sudoku, 0, 0) ) {
+        printf("\nSolution Found!\n");
+        printPuzzle(sudoku);
+    } else {
+        printf("No solution found...This shouldn't happen.\n");
     }
-    printf("\n\n");
-    printPuzzle(sudoku -> squares);
-    free(puzzle);
+
     free(sudoku);
 
     return 0;

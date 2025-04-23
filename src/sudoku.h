@@ -34,12 +34,12 @@ typedef struct Square
     int row, column;
 } Square;
 
-
-int ** generatePuzzle();
-int ** createPuzzle();
-int updateSudoku(Square *** sudoku, int row, int col);
+int checkBox(Square *** sudoku, int row, int col, int val);
+int checkRow(Square *** sudoku, int row, int val);
+int checkColumn(Square *** sudoku,int col, int val);
+void fillBox(int row, int col, Square *** sudoku);
+int isValid(Square *** sudoku, int row, int col, int val);
+int fillPuzzle(Square *** sudoku, int row, int col);
+void removeValues(Square *** sudoku);
 void printPuzzle(Square *** puzzle);
-void printPuzzleTest(int ** puzzle);
-Sudoku * setPuzzle(int ** puzzle);
-int checkPuzzle(Square *** squares, Box **  boxes);
 #endif //SUDOKU_SOLVER_SUDOKU_H
