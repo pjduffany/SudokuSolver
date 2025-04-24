@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "sudoku.h"
 
 int UNSOLVED = 81;
@@ -6,25 +7,24 @@ int SIZE_ROWS = 9;
 int SIZE_COLS = 9;
 
 int main() {
-    int** puzzle = createPuzzle();
-    int solved = 0;
+    Sudoku * sudoku = malloc(sizeof(Sudoku));
+    sudoku -> puzzle = setPuzzle();
 
-    Sudoku * sudoku = setPuzzle(puzzle);
-    printPuzzle(sudoku -> squares);
+    // fill the puzzle using backtracking
+    fillPuzzle(sudoku -> puzzle, 0, 0);
 
-    while (UNSOLVED > 0)
-    {
-        solved = checkPuzzle(sudoku->squares, sudoku -> boxes);
+    // remove random values from the puzzle
+    removeValues(sudoku -> puzzle);
+    printf("Empty puzzle: \n");
+    printPuzzle(sudoku -> puzzle);
 
-        if (solved == 0)
-        {
-            printf("Failed to solve puzzle...\n");
-            break;
-        }
+    if ( fillPuzzle(sudoku -> puzzle, 0, 0) ) {
+        printf("\n\nSucceeded!\n");
+        printPuzzle(sudoku -> puzzle);
+    } else {
+        printf("No solution....should not happen!\n");
+        printPuzzle(sudoku -> puzzle);
     }
-
-    printf("\n\n");
-    printPuzzle(sudoku -> squares);
-
+    free(sudoku);
     return 0;
 }
