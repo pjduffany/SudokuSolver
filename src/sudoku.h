@@ -12,34 +12,24 @@ extern int SIZE_COLS;
 
 typedef struct Sudoku
 {
-  struct Square *** squares;
-  struct Box ** boxes;
+  struct Square *** puzzle;
 } Sudoku;
-
-
-typedef struct Box
-{
-    struct Square ** squares;
-    struct Box * next;
-    int numbers;
-    int possible[9];
-    int solvable;
-} Box;
 
 typedef struct Square
 {
     int number;
-    int possible[9];
-    int solvable;
-    Box * box;
-    int row, column;
+    int row;
+    int column;
 } Square;
 
-int ** createPuzzle();
-Sudoku * createSudoku(Square *** squares, Box ** boxes);
-int updateSudoku(Square *** sudoku, int row, int col);
+int checkBox(Square *** sudoku, int row, int col, int val);
+int checkRow(Square *** sudoku, int row, int val);
+int checkColumn(Square *** sudoku,int col, int val);
+void fillBox(int row, int col, Square *** sudoku);
+int isValid(Square *** sudoku, int row, int col, int val);
+int fillPuzzle(Square *** sudoku, int row, int col);
+int insertValues(Square *** sudoku, int row, int col);
+void removeValues(Square *** sudoku);
 void printPuzzle(Square *** puzzle);
-void printPuzzleTest(int ** puzzle);
-Sudoku * setPuzzle(int ** puzzle);
-int checkPuzzle(Square *** squares, Box **  boxes);
+Square *** setPuzzle();
 #endif //SUDOKU_SOLVER_SUDOKU_H
