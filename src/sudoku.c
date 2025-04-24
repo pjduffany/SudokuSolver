@@ -142,6 +142,7 @@ void removeValues(Square *** sudoku) {
     }
 }
 
+
 Square *** setPuzzle()
 {
     // allocate mem for sudoku
