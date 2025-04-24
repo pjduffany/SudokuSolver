@@ -9,7 +9,7 @@ int main() {
     fillPuzzle(sudoku -> puzzle, 0, 0);
 
     // remove random values from the puzzle
-    removeValues(sudoku -> puzzle);
+    removeValues(sudoku -> puzzle, 55);
     printf("Empty puzzle: \n");
     printPuzzle(sudoku -> puzzle);
 
