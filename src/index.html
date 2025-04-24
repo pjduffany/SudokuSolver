@@ -72,14 +72,30 @@
         cell.contentEditable = false;  // toggle this for user input
       }
     }
-    function renderGrid(heap, className = "") {
+    function renderGrid(heap, mode) {
+
       for (let idx = 0; idx < N * N; idx++) {
         const r = Math.floor(idx / N);
         const c = idx % N;
         const val = heap[idx];
         const cell = grid.rows[r].cells[c];
+        // update the text content
         cell.innerText = val || "";
-        cell.className = val ? className : "";
+
+        if (mode === "given"){
+          cell.classList.remove("given", "solved");
+          if(val){
+            cell.classList.add("given");
+          }
+        }else if(mode === "solved"){
+          cell.classList.remove("solved");
+          if(!cell.classList.contains("given")){
+            cell.classList.add("solved");
+          }
+        }
+      
+
+
       }
     }
     // hook up the “New Puzzle” button
@@ -94,13 +110,15 @@
       document.getElementById("solve").disabled = false; // reenable the solve button
 
     };
+
     // hook up the "Solve Puzzle" button
     document.getElementById("solve").onclick = () => {
       mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
-      renderGrid(heap, "solved");
+      renderGrid(heap, "solved", { preserveGivens: true });
       document.getElementById("solve").disabled = true; // disable to prevent multiple solves
 
     };
+
     // generate one on load
     document.getElementById("new").click();
   });
