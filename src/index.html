@@ -44,7 +44,13 @@
 </head>
 <body>
 <h1 style="text-align:center">Sudoku Solver</h1>
-<div style="text-align:center">
+<div style="text-align: center; margin-top: 1em;">
+  <label for="difficulty">Difficulty:</label>
+  <select id="difficulty">
+    <option value="30">Easy</option>
+    <option value="45">Medium</option>
+    <option value="55">Hard</option>
+  </select>
   <button id="new">New Puzzle</button>
   <button id="solve">Solve Puzzle</button>
 </div>
@@ -78,15 +84,22 @@
     }
     // hook up the “New Puzzle” button
     document.getElementById("new").onclick = () => {
+      const difficulty = parseInt(document.getElementById("difficulty").value, 10);
+
       if (ptr !== null) mod._free(ptr);
       ptr = mod._malloc(81 * 4); // reallocate
-      mod._generate_puzzle(ptr);
+      heap = new Int32Array(mod.HEAP32.buffer, ptr, 81); // ✅ refresh view
+      mod._generate_puzzle(ptr, difficulty);
       renderGrid(heap, "given");
+      document.getElementById("solve").disabled = false; // reenable the solve button
+
     };
-    // solve puzzle
+    // hook up the "Solve Puzzle" button
     document.getElementById("solve").onclick = () => {
       mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
       renderGrid(heap, "solved");
+      document.getElementById("solve").disabled = true; // disable to prevent multiple solves
+
     };
     // generate one on load
     document.getElementById("new").click();
