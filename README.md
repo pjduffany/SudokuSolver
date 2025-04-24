@@ -20,6 +20,5 @@ Follow these steps to configure the application's front end.
         -s EXPORTED_RUNTIME_METHODS='["HEAP32"]' \
         -o sudoku.js
 
-4. Serve & Test:
-    # In the directory with index.html & sudoku.js
+4. Serve & Test: (In the directory with index.html & sudoku.js)
     python3 -m http.server 8080
