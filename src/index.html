@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sudoku in WASM</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 30px auto;
+      border: 3px solid #222;
+    }
+
+    td {
+      width: 2.2em;
+      height: 2.2em;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 1.4em;
+      font-family: monospace;
+      border: 1px solid #aaa;
+      background-color: #fff;
+    }
+
+    /* Highlight outer border of 3×3 boxes */
+    td:nth-child(3), td:nth-child(6) {
+      border-right: 3px solid #222;
+    }
+
+    tr:nth-child(3) td, tr:nth-child(6) td {
+      border-bottom: 3px solid #222;
+    }
+
+    .given {
+      background: #eef;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .solved {
+      background: #d9f9d9;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align:center">Sudoku Solver</h1>
+<div style="text-align:center">
+  <button id="new">New Puzzle</button>
+  <button id="solve">Solve Puzzle</button>
+</div>
+<table id="grid"></table>
+<script src="sudoku.js"></script>
+<script>
+  SudokuModule().then(mod => {
+    const N = 9;
+    const grid = document.getElementById("grid");
+    // Allocate 81 ints (4 bytes each) in WASM memory
+    let ptr = mod._malloc(81 * 4);
+    let heap = new Int32Array(mod.HEAP32.buffer, ptr, 81);  // allocate once
+
+    // build the HTML table
+    for (let r = 0; r < N; r++) {
+      const row = grid.insertRow();
+      for (let c = 0; c < N; c++) {
+        const cell = row.insertCell();
+        cell.contentEditable = false;  // toggle this for user input
+      }
+    }
+    function renderGrid(heap, className = "") {
+      for (let idx = 0; idx < N * N; idx++) {
+        const r = Math.floor(idx / N);
+        const c = idx % N;
+        const val = heap[idx];
+        const cell = grid.rows[r].cells[c];
+        cell.innerText = val || "";
+        cell.className = val ? className : "";
+      }
+    }
+    // hook up the “New Puzzle” button
+    document.getElementById("new").onclick = () => {
+      if (ptr !== null) mod._free(ptr);
+      ptr = mod._malloc(81 * 4); // reallocate
+      mod._generate_puzzle(ptr);
+      renderGrid(heap, "given");
+    };
+    // solve puzzle
+    document.getElementById("solve").onclick = () => {
+      mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
+      renderGrid(heap, "solved");
+    };
+    // generate one on load
+    document.getElementById("new").click();
+  });
+</script>
+</body>
+</html>

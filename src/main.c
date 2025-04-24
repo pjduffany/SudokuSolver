@@ -1,10 +1,5 @@
 #include <stdio.h>
-#include <time.h>
 #include "sudoku.h"
-
-int UNSOLVED = 81;
-int SIZE_ROWS = 9;
-int SIZE_COLS = 9;
 
 int main() {
     Sudoku * sudoku = malloc(sizeof(Sudoku));
@@ -25,6 +20,8 @@ int main() {
         printf("No solution....should not happen!\n");
         printPuzzle(sudoku -> puzzle);
     }
+
     free(sudoku);
+
     return 0;
 }
