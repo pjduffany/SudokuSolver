@@ -16,17 +16,15 @@ int main() {
     // remove random values from the puzzle
     removeValues(sudoku -> puzzle);
     printf("Empty puzzle: \n");
-
     printPuzzle(sudoku -> puzzle);
 
     if ( fillPuzzle(sudoku -> puzzle, 0, 0) ) {
         printf("\n\nSucceeded!\n");
         printPuzzle(sudoku -> puzzle);
     } else {
-        printf("No solution (should not happen!)\n");
+        printf("No solution....should not happen!\n");
+        printPuzzle(sudoku -> puzzle);
     }
-
     free(sudoku);
-
     return 0;
 }
