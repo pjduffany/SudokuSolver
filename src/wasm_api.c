@@ -21,14 +21,14 @@ void freePuzzle(Square *** sudoku) {
 
 // Expose a single flat-board API to JS
 // `buffer` is a pointer to 81 ints in WASM memory.
-void generate_puzzle(int *buffer) {
+void generate_puzzle(int *buffer, int difficulty) {
     puzzle = setPuzzle();
 
     // fill the puzzle using backtracking
     fillPuzzle(puzzle, 0, 0);
 
     // remove random values from the puzzle
-    removeValues(puzzle);
+    removeValues(puzzle, difficulty);
 
     // now copy into buffer:
     for (int row = 0; row < 9; row++)

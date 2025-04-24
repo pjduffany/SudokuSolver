@@ -29,7 +29,7 @@ void fillBox(int row, int col, Square *** sudoku);
 int isValid(Square *** sudoku, int row, int col, int val);
 int fillPuzzle(Square *** sudoku, int row, int col);
 int insertValues(Square *** sudoku, int row, int col);
-void removeValues(Square *** sudoku);
+void removeValues(Square *** sudoku, int difficulty);
 void printPuzzle(Square *** puzzle);
 Square *** setPuzzle();
 #endif //SUDOKU_SOLVER_SUDOKU_H

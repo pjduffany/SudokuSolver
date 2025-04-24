@@ -118,9 +118,9 @@ int insertValues(Square *** sudoku, int row, int col)
 }
 
 // Remove random values from puzzle
-void removeValues(Square *** sudoku) {
-    int count = 51;
-    while (count > 0) {
+void removeValues(Square *** sudoku, int difficulty) {
+    printf("Selected difficulty is: %d", difficulty);
+    while (difficulty > 0) {
 
         int square = rand() % 81;
 
@@ -137,7 +137,7 @@ void removeValues(Square *** sudoku) {
             sudoku[i][j] -> number = 0;
 
             // Decrease the count
-            count--;
+            difficulty--;
         }
     }
 }
