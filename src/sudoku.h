@@ -22,11 +22,12 @@ typedef struct Square
     int column;
 } Square;
 
+void freePuzzle(Square *** sudoku);
 int checkBox(Square *** sudoku, int row, int col, int val);
 int checkRow(Square *** sudoku, int row, int val);
 int checkColumn(Square *** sudoku,int col, int val);
 void fillBox(int row, int col, Square *** sudoku);
-int isValid(Square *** sudoku, int row, int col, int val);
+int checkPuzzle(Square *** sudoku, int row, int col, int val);
 int fillPuzzle(Square *** sudoku, int row, int col);
 int insertValues(Square *** sudoku, int row, int col);
 void removeValues(Square *** sudoku, int difficulty);

@@ -9,18 +9,10 @@ int SIZE_COLS = 9;
 // global variable to store the puzzle for later use
 static Square *** puzzle = NULL;
 
-void freePuzzle(Square *** sudoku) {
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            free(sudoku[row][col]); // free each Square
-        }
-        free(sudoku[row]); // free each row
-    }
-    free(sudoku); // free top-level pointer
+int is_valid_buffer(int *buffer, int row, int col, int val) {
+    return checkPuzzle(puzzle, row, col, val);
 }
 
-// Expose a single flat-board API to JS
-// `buffer` is a pointer to 81 ints in WASM memory.
 void generate_puzzle(int *buffer, int difficulty) {
     puzzle = setPuzzle();
 
@@ -30,7 +22,7 @@ void generate_puzzle(int *buffer, int difficulty) {
     // remove random values from the puzzle
     removeValues(puzzle, difficulty);
 
-    // now copy into buffer:
+    // copy into buffer
     for (int row = 0; row < 9; row++)
         for (int col = 0; col < 9; col++)
             buffer[row * 9 + col] = puzzle[row][col] -> number;
