@@ -71,7 +71,7 @@ SudokuModule().then(mod => {
             }
 
             // control editability
-            cell.contentEditable = !locked;
+            cell.contentEditable = !locked && !val;
         }
     }
     // hook up the “New Puzzle” button
