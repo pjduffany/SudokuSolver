@@ -75,7 +75,7 @@
   SudokuModule().then(mod => {
     const N = 9;
     const grid = document.getElementById("grid");
-    // Allocate 81 ints (4 bytes each) in WASM memory
+    // allocate 81 ints (4 bytes each) in WASM memory
     let ptr = mod._malloc(81 * 4);
     let heap = new Int32Array(mod.HEAP32.buffer, ptr, 81);  // allocate once
 
@@ -86,7 +86,7 @@
         const cell = row.insertCell();
         cell.dataset.row = r;
         cell.dataset.col = c;
-        cell.contentEditable = false;  // toggle this for user input
+        cell.contentEditable = false;  // toggle for user input
         cell.addEventListener("input", (e) => {
           const cell = e.target;
           const row = parseInt(cell.dataset.row, 10);
@@ -94,18 +94,17 @@
           const raw = cell.innerText.trim();
           const val = parseInt(raw, 10);
 
-          // Sanitize: allow only 1–9, otherwise clear
+          // allow only 1–9, otherwise clear
           if (!/^[1-9]$/.test(raw)) {
             cell.innerText = "";
             heap[row * 9 + col] = 0;
             cell.classList.remove("invalid");
             return;
           }
-
           // Update heap
           heap[row * 9 + col] = val;
 
-          // ✅ Check with C logic: row, col, box
+          // check with C logic: row, col, box
           const isValid = mod._is_valid_buffer(ptr, row, col, val);
 
           if (isValid) {
@@ -125,14 +124,14 @@
         cell.innerText = val || "";
         cell.className = val ? className : "";
 
-        // Style classes
+        // style classes
         if (val) {
           cell.className = className;
         } else {
           cell.className = locked ? "" : "editable";
         }
 
-        // Control editability
+        // control editability
         cell.contentEditable = !locked && !val;
       }
     }
@@ -146,22 +145,19 @@
       mod._generate_puzzle(ptr, difficulty);
       renderGrid(heap, "given", true);
       document.getElementById("solve").disabled = false; // reenable the solve button
-      document.getElementById("play").disabled = false; // reenable the solve button
+      document.getElementById("play").disabled = false; // reenable the play button
 
     };
     // hook up the "Solve Puzzle" button
     document.getElementById("solve").onclick = () => {
-      mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
+      mod._fill_puzzle(ptr);
       renderGrid(heap, "solved");
       document.getElementById("solve").disabled = true; // disable to prevent multiple solves
       document.getElementById("play").disabled = true; // disable
-
     };
     document.getElementById("play").onclick = () => {
-      //mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
       renderGrid(heap, "given", false);
       document.getElementById("solve").disabled = false; // disable to prevent multiple solves
-
     };
     // generate one on load
     document.getElementById("new").click();
