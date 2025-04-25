@@ -1,0 +1,50 @@
+table {
+    border-collapse: collapse;
+    margin: 30px auto;
+    border: 3px solid #222;
+}
+
+td {
+    width: 2.2em;
+    height: 2.2em;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.4em;
+    font-family: monospace;
+    border: 1px solid #aaa;
+    background-color: #fff;
+}
+
+/* Highlight outer border of 3×3 boxes */
+td:nth-child(3), td:nth-child(6) {
+    border-right: 3px solid #222;
+}
+
+tr:nth-child(3) td, tr:nth-child(6) td {
+    border-bottom: 3px solid #222;
+}
+
+.given {
+    background: #eef;
+    font-weight: bold;
+    color: #333;
+}
+
+.solved {
+    background: #d9f9d9;
+    color: #222;
+}
+
+.editable {
+    background: #fff;
+    color: #000;
+}
+
+.editable:focus {
+    outline: 2px solid #66f;
+}
+
+.invalid {
+    background: #fdd;
+    border: 2px solid red;
+}
