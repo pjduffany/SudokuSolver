@@ -9,6 +9,15 @@
 #include <time.h>
 #include "sudoku.h"
 
+void freePuzzle(Square *** sudoku) {
+    for (int row = 0; row < 9; row++) {
+        for (int col = 0; col < 9; col++) {
+            free(sudoku[row][col]); // free each Square
+        }
+        free(sudoku[row]); // free each row
+    }
+    free(sudoku); // free top-level pointer
+}
 
 
 /**
@@ -99,6 +108,7 @@ void fillBox(int row, int col, Square *** sudoku)
     {
         for (int y = 0; y < SIZE_COLS / 3; y++)
         {
+            // check if the value is already in the box
             while (!checkBox(sudoku, row, col, val))
             {
                 val = (rand() % 9) + 1;
@@ -192,7 +202,6 @@ int insertValues(Square *** sudoku, int row, int col)
 void removeValues(Square *** sudoku, int difficulty) {
     printf("Selected difficulty is: %d", difficulty);
     while (difficulty > 0) {
-
         int square = rand() % 81;
 
         // get the row
@@ -226,20 +235,20 @@ Square *** setPuzzle()
     Square *** puzzle = (Square***)malloc(sizeof(Square**)*9);
     srand(time(0));
 
-    for (int i = 0; i < 9; i++)
+    for (int row = 0; row < 9; row++)
     {
         // allocate mem for rows
-        puzzle[i] = (Square**)malloc(sizeof(Square*)*9);
+        puzzle[row] = (Square**)malloc(sizeof(Square*) * 9);
 
-        for (int j = 0; j < 9; j++)
+        for (int col = 0; col < 9; col++)
         {
             // allocate mem for cols
-            puzzle[i][j] = (Square*)malloc(sizeof(Square));
+            puzzle[row][col] = (Square*)malloc(sizeof(Square));
 
             // initialize numbers to 0
-            puzzle[i][j] -> number = 0;
-            puzzle[i][j] -> row = i;
-            puzzle[i][j] -> column = j;
+            puzzle[row][col] -> number = 0;
+            puzzle[row][col] -> row = row;
+            puzzle[row][col] -> column = col;
         }
     }
     for (int i = 0; i < 9; i += 3) {
