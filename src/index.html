@@ -87,6 +87,7 @@
         cell.dataset.row = r;
         cell.dataset.col = c;
         cell.contentEditable = false;  // toggle for user input
+
         cell.addEventListener("input", (e) => {
           const cell = e.target;
           const row = parseInt(cell.dataset.row, 10);
@@ -132,7 +133,7 @@
         }
 
         // control editability
-        cell.contentEditable = !locked && !val;
+        cell.contentEditable = !locked;
       }
     }
     // hook up the “New Puzzle” button
