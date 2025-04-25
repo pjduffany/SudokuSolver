@@ -2,7 +2,7 @@
 //
 // Attribution:
 //   Primary Author: Patrick Duffany
-//   Contributor: zack Ahmed (Analysis)
+//   Contributor: Zack Ahmed (Verification)
 
 #include <stdlib.h>
 #include "sudoku.h"

@@ -2,7 +2,7 @@
 //
 // Attribution:
 //   Primary Author: Patrick Duffany
-//   Contributor: Zack Ahmed (analysis)
+//   Contributor: Zack Ahmed (Verification)
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -201,6 +201,7 @@ int insertValues(Square *** sudoku, int row, int col)
  * Author: Patrick Duffany
  * Description:  Remove random values from puzzle based off difficulty
  * Param: difficulty  # cells to remove
+ * Vulnerability: Integer Overflow [6-1] rand() is bound to 81 squares so it doesn't overflow with fixed grid
  */
 void removeValues(Square *** sudoku, int difficulty) {
     printf("Selected difficulty is: %d", difficulty);
@@ -231,31 +232,63 @@ void removeValues(Square *** sudoku, int difficulty) {
  * Author: Patrick Duffany
  * Description:  Allocate and initialize an empty grid, then fill diagonal boxes.
  * Return: Square***  fresh 9x9 grid
+ * Vulnerability: Failure to Handle Errors [4-4],[4-5],[4-6] prevents undefined behavior if malloc fails and exits
  */
 Square *** setPuzzle()
 {
-    // allocate mem for sudoku
-    Square *** puzzle = (Square***)malloc(sizeof(Square**)*9);
-    srand(time(0));
+    Square ***puzzle = malloc(sizeof(*puzzle) * SIZE_ROWS);
+    if (!puzzle) {
+        perror("malloc puzzle");
+        exit(1);  
+    }
 
-    for (int row = 0; row < 9; row++)
+    srand((unsigned)time(NULL));
+
+    for (int row = 0; row < SIZE_ROWS; row++)
     {
-        // allocate mem for rows
-        puzzle[row] = (Square**)malloc(sizeof(Square*) * 9);
+        // allocate row
+        puzzle[row] = malloc(sizeof(*puzzle[row]) * SIZE_COLS);
+        if (!puzzle[row]) {
+            perror("malloc puzzle[row]");
+            // clean up any previously allocated rows
+            for (int i = 0; i < row; i++) {
+                free(puzzle[i]);
+            }
+            free(puzzle);
+            exit(1); 
+        }
 
-        for (int col = 0; col < 9; col++)
+        for (int col = 0; col < SIZE_COLS; col++)
         {
-            // allocate mem for cols
-            puzzle[row][col] = (Square*)malloc(sizeof(Square));
+            // allocate the individual cell
+            puzzle[row][col] = malloc(sizeof(*puzzle[row][col]));
+            if (!puzzle[row][col]) {
+                perror("malloc puzzle[row][col]");
+                // clean up this rows cells
+                for (int j = 0; j < col; j++) {
+                    free(puzzle[row][j]);
+                }
+                // clean up prior rows
+                for (int i = 0; i < row; i++) {
+                    for (int j = 0; j < SIZE_COLS; j++) {
+                        free(puzzle[i][j]);
+                    }
+                    free(puzzle[i]);
+                }
+                free(puzzle[row]);
+                free(puzzle);
+                exit(1); 
+            }
 
-            // initialize numbers to 0
-            puzzle[row][col] -> number = 0;
-            puzzle[row][col] -> row = row;
-            puzzle[row][col] -> column = col;
+            // initialize members
+            puzzle[row][col]->number = 0;
+            puzzle[row][col]->row    = row;
+            puzzle[row][col]->column = col;
         }
     }
-    for (int i = 0; i < 9; i += 3) {
-        // fill boxes diagonally
+
+    // Fill diagonal boxes (uses symbolic SIZE_ROWS)
+    for (int i = 0; i < SIZE_ROWS; i += SIZE_ROWS/3) {
         fillBox(i, i, puzzle);
     }
 
