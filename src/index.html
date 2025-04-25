@@ -1,3 +1,9 @@
+
+<!--
+  Attribution:
+    Primary Author: Patrick Duffany
+    Contributor: Zack Ahmed
+-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +27,7 @@
       background-color: #fff;
     }
 
-    /* Highlight outer border of 3×3 boxes */
+    /* Highlight outer border of 3x3 boxes */
     td:nth-child(3), td:nth-child(6) {
       border-right: 3px solid #222;
     }
@@ -72,6 +78,17 @@
         cell.contentEditable = false;  // toggle this for user input
       }
     }
+
+    /**
+     * Description: Render the 9x9 puzzle grid.
+     * Author: Patrick Duffany, Zack Ahmed
+     * Param: {Int32Array} heap        flat 81-element array of cell values
+     * Param: {"given"|"solved"} mode  whether to mark cells as given or solved 
+     * Side-effects: manipulates cell.innerText and cell.classList
+     * Vulnerability: Catching Exceptions [3-1] catches error if WASM-loading fails
+     * Vulnerability: Information Leakage [5-1] using innerText vs innerHTML prevents injection of HTML/JS
+     */
+
     function renderGrid(heap, mode) {
 
       for (let idx = 0; idx < N * N; idx++) {
@@ -93,9 +110,6 @@
             cell.classList.add("solved");
           }
         }
-      
-
-
       }
     }
     // hook up the “New Puzzle” button
@@ -104,7 +118,7 @@
 
       if (ptr !== null) mod._free(ptr);
       ptr = mod._malloc(81 * 4); // reallocate
-      heap = new Int32Array(mod.HEAP32.buffer, ptr, 81); // ✅ refresh view
+      heap = new Int32Array(mod.HEAP32.buffer, ptr, 81); //  refresh view
       mod._generate_puzzle(ptr, difficulty);
       renderGrid(heap, "given");
       document.getElementById("solve").disabled = false; // reenable the solve button
@@ -114,13 +128,21 @@
     // hook up the "Solve Puzzle" button
     document.getElementById("solve").onclick = () => {
       mod._fill_puzzle(ptr); // call into C to solve it (same flat buffer)
-      renderGrid(heap, "solved", { preserveGivens: true });
+      renderGrid(heap, "solved");
       document.getElementById("solve").disabled = true; // disable to prevent multiple solves
 
     };
 
     // generate one on load
     document.getElementById("new").click();
+  })
+  .catch(err => {
+      console.error("WASM load error:", err);
+      // Inform the user
+      alert("Failed to load the Sudoku WebAssembly module:\n" + err);
+      // Disable controls to prevent further errors
+      document.getElementById("new").disabled = true;
+      document.getElementById("solve").disabled = true;
   });
 </script>
 </body>

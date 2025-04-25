@@ -3,8 +3,17 @@ Follow these steps to configure the application's front end.
 1. Install & configure Emscripten:
     git clone https://github.com/emscripten-core/emsdk.git
     cd emsdk
+
+    *Note: If you are getting an error when trying to run the scripts
+     try inputting to give permission: Set-ExecutionPolicy Bypass -Scope Process -Force
+
     ./emsdk install latest
     ./emsdk activate latest
+
+    For Windows: 
+    ./emsdk_env.bat
+
+    Linux/Other:
     source ./emsdk_env.sh
 
 2. Verify that the emsdk is installed:

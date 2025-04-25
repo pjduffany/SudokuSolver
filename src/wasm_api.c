@@ -1,6 +1,9 @@
+// wasm_api.c
 //
-// Created by Patrick Duffany on 4/23/25.
-//
+// Attribution:
+//   Primary Author: Patrick Duffany
+//   Contributor: zack Ahmed (Analysis)
+
 #include <stdlib.h>
 #include "sudoku.h"
 
@@ -9,6 +12,13 @@ int SIZE_COLS = 9;
 // global variable to store the puzzle for later use
 static Square *** puzzle = NULL;
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Deallocate a full Sudoku grid
+ * Param: sudoku  9x9 grid previously returned by setPuzzle()
+ * Side-effects: frees all malloc’d memory
+ */
 void freePuzzle(Square *** sudoku) {
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
@@ -19,8 +29,15 @@ void freePuzzle(Square *** sudoku) {
     free(sudoku); // free top-level pointer
 }
 
-// Expose a single flat-board API to JS
-// `buffer` is a pointer to 81 ints in WASM memory.
+
+/**
+ * Author: Patrick Duffany
+ * Description: generate a new puzzle and copy it into a flat buffer for JS
+ * Param: buffer  a pointer to 81 ints in WASM memory
+ * Param: difficulty  number of cells to remove
+ * Side-effects: frees all malloced memory
+ * Vulnerability: Buffer Overrun [1-4] nested loop doesn't write past 81-element buffer
+ */
 void generate_puzzle(int *buffer, int difficulty) {
     puzzle = setPuzzle();
 
@@ -39,6 +56,14 @@ void generate_puzzle(int *buffer, int difficulty) {
     printPuzzle(puzzle);
 }
 
+
+/**
+ * Author: Patrick Duffany
+ * Description: Solve the previously generated puzzle, copy back to JS buffer.
+ * Param: buffer  a pointer to 81 ints in WASM memory
+ * Side-effects: prints debug info, then frees puzzle
+ * Vulnerability: Format String [2-2] fixed string literals prevent format-string attacks
+ */
 void fill_puzzle(int * buffer)
 {
     if (fillPuzzle( puzzle, 0, 0))

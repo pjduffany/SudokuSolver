@@ -1,12 +1,26 @@
+// sudoku.c
 //
-// Created by Patrick Duffany on 4/3/25.
-//
+// Attribution:
+//   Primary Author: Patrick Duffany
+//   Contributor: Zack Ahmed (analysis)
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include "sudoku.h"
 
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Check a 3x3 box for the presence of a value.
+ * Param: sudoku  9x9 grid of Square pointers
+ * Param: row     starting row of the box
+ * Param: col     starting column of the box
+ * Param: val     value to search for (1–9)
+ * Return: int    1 if not found (valid), 0 if found (invalid)
+ * Vulnerability: Failure to Handle Errors [4-1] calls perror() if sudoku is NULL and handles mis-init
+ */
 int checkBox(Square *** sudoku, int row, int col, int val)
 {
     for (int x = 0; x < SIZE_ROWS / 3; x++) {
@@ -26,9 +40,18 @@ int checkBox(Square *** sudoku, int row, int col, int val)
 }
 
 
-int checkRow(Square *** sudoku, int row, int val)
+/**
+ * Author: Patrick Duffany
+ * Description:  Check a row for the presence of val
+ * Param: sudoku  9x9 grid
+ * Param: row     row index to search
+ * Param: val     value to search for
+ * Return: int    1 if not found, 0 if found
+ * Vulnerability: Buffer Overrun [1-1] loop ensure grid's width is never exceeded before indexing into fixed-sized array
+ */
+int checkRow(Square *** sudoku, int row, int val) 
 {
-    for (int col = 0; col < SIZE_COLS; col++) {
+    for (int col = 0; col < SIZE_COLS; col++) {  
         // check if the value is present in the row
         if (sudoku[row][col] -> number == val) {
             return 0;
@@ -37,6 +60,16 @@ int checkRow(Square *** sudoku, int row, int val)
     return 1;
 }
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Check a column for val
+ * Param: sudoku  9x9 grid
+ * Param: col     column index
+ * Param: val     value to search
+ * Return: int    1 if not found, 0 if found
+ * Vulnerability: Buffer Overrun [1-2] loop ensure grid's width is never exceeded before indexing into fixed-sized array
+ */
 int checkColumn(Square *** sudoku,int col, int val)
 {
     for (int row = 0; row < SIZE_ROWS; row++) {
@@ -48,6 +81,16 @@ int checkColumn(Square *** sudoku,int col, int val)
     return 1; // return true
 }
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Fill one 3x3 box with random valid values
+ * Param: row     box-start row
+ * Param: col     box-start column
+ * Param: sudoku  grid to fill
+ * side-effect: mutates sudoku[][]->number
+ * Vulnerability: Failure to Handle Errors [4-2] calls perror() and avoid bad state/undefined behavior
+ */
 void fillBox(int row, int col, Square *** sudoku)
 {
     int val = rand() % 9 + 1;
@@ -65,13 +108,22 @@ void fillBox(int row, int col, Square *** sudoku)
                 sudoku[row + x][col + y] -> number =  val;
 
             } else {
-                perror("Failed to initialize sudoku puzzle...\n");
+                perror("Failed to initialize sudoku puzzle...\n"); 
                 EXIT_FAILURE;
             }
         }
     }
 }
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  validity check of puzzle
+ * Param: sudoku  grid to fill
+ * Param: row     box-start row
+ * Param: col     box-start column
+ * Param: val     number 1-9
+ */
 int checkPuzzle(Square *** sudoku, int row, int col, int val)
 {
     // offset rows and columns for boxes
@@ -83,6 +135,14 @@ int checkPuzzle(Square *** sudoku, int row, int col, int val)
            checkBox(sudoku, boxStartRow, boxStartCol, val);
 }
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Recursively fill puzzle via backtracking
+ * Param: sudoku  grid to fill
+ * Param: row     row index
+ * Param: col     column index
+ */ 
 int fillPuzzle(Square *** sudoku, int row, int col)
 {
     // end of puzzle
@@ -101,6 +161,13 @@ int fillPuzzle(Square *** sudoku, int row, int col)
 }
 
 
+/**
+ * Author: Patrick Duffany
+ * Description:  Tries values 1-9 at cell indicated by row,col
+ * Param: sudoku  grid to fill
+ * Param: row     row index
+ * Param: col     column index
+ */
 int insertValues(Square *** sudoku, int row, int col)
 {
     // try inserting values
@@ -117,7 +184,11 @@ int insertValues(Square *** sudoku, int row, int col)
     return 0; // triggers backtracking
 }
 
-// Remove random values from puzzle
+/**
+ * Author: Patrick Duffany
+ * Description:  Remove random values from puzzle based off difficulty
+ * Param: difficulty  # cells to remove
+ */
 void removeValues(Square *** sudoku, int difficulty) {
     printf("Selected difficulty is: %d", difficulty);
     while (difficulty > 0) {
@@ -143,6 +214,12 @@ void removeValues(Square *** sudoku, int difficulty) {
 }
 
 
+
+/**
+ * Author: Patrick Duffany
+ * Description:  Allocate and initialize an empty grid, then fill diagonal boxes.
+ * Return: Square***  fresh 9x9 grid
+ */
 Square *** setPuzzle()
 {
     // allocate mem for sudoku
@@ -174,6 +251,11 @@ Square *** setPuzzle()
 }
 
 
+/**
+ * Author: Patrick Duffany
+ * Description:  Print the 9x9 grid with ASCII border
+ * Vulnerability: Buffer Overrun [1-3] nested loop ensures we remain in the 9x9 grid
+ */
 void printPuzzle(Square *** puzzle)
 {
     printf("-------------------------------\n");
