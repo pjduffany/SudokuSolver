@@ -3,6 +3,19 @@ Follow these steps to configure the application's front end.
 1. Install & configure Emscripten:<br />
     git clone https://github.com/emscripten-core/emsdk.git<br />
     cd emsdk <br />
+    
+    *Note: If you are getting an error when trying to run the scripts <br />
+     try inputting to give permission: Set-ExecutionPolicy Bypass -Scope Process -Force <br />
+
+    ./emsdk install latest <br />
+    ./emsdk activate latest <br />
+
+    For Windows: <br />
+        ./emsdk_env.bat <br />
+
+    Linux/Other: <br />
+       source ./emsdk_env.sh <br />
+
     ./emsdk install latest <br />
     ./emsdk activate latest <br />
     source ./emsdk_env.sh <br />
@@ -16,7 +29,7 @@ Follow these steps to configure the application's front end.
         -s WASM=1 \
         -s MODULARIZE=1 \
         -s EXPORT_NAME="SudokuModule" \
-        -s EXPORTED_FUNCTIONS='["_malloc","_free","_generate_puzzle","_fill_puzzle"]' \
+        -s EXPORTED_FUNCTIONS='["_malloc","_free","_generate_puzzle","_fill_puzzle","_is_valid_buffer"]'
         -s EXPORTED_RUNTIME_METHODS='["HEAP32"]' \
         -o sudoku.js
 
