@@ -51,6 +51,7 @@ SudokuModule().then(mod => {
      * Side-effects: manipulates cell.innerText and cell.classList
      * Vulnerability: Catching Exceptions [3-1] catches error if WASM-loading fails
      * Vulnerability: Information Leakage [5-1] using innerText vs innerHTML prevents injection of HTML/JS
+     * Vulnerability: Information Leakage [5-2] prevent users from accessing the puzzle once solved
      */
 
     function renderGrid(heap, className = "", locked = true) {
