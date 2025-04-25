@@ -12,23 +12,17 @@ int SIZE_COLS = 9;
 // global variable to store the puzzle for later use
 static Square *** puzzle = NULL;
 
-
 /**
  * Author: Patrick Duffany
- * Description:  Deallocate a full Sudoku grid
- * Param: sudoku  9x9 grid previously returned by setPuzzle()
- * Side-effects: frees all malloc’d memory
+ * Description:  wrapper function to validity check of the value entered by user
+ * Param: sudoku  grid to fill
+ * Param: row     box-start row
+ * Param: col     box-start column
+ * Param: val     number 1-9
  */
-void freePuzzle(Square *** sudoku) {
-    for (int row = 0; row < 9; row++) {
-        for (int col = 0; col < 9; col++) {
-            free(sudoku[row][col]); // free each Square
-        }
-        free(sudoku[row]); // free each row
-    }
-    free(sudoku); // free top-level pointer
+int is_valid_buffer(int *buffer, int row, int col, int val) {
+    return checkPuzzle(puzzle, row, col, val);
 }
-
 
 /**
  * Author: Patrick Duffany

@@ -43,6 +43,16 @@ SudokuModule().then(mod => {
             });
         }
     }
+    /**
+     * Description: Render the 9x9 puzzle grid.
+     * Author: Patrick Duffany
+     * Param: {Int32Array} heap        flat 81-element array of cell values
+     * Param: {"given"|"solved"} mode  whether to mark cells as given or solved
+     * Side-effects: manipulates cell.innerText and cell.classList
+     * Vulnerability: Catching Exceptions [3-1] catches error if WASM-loading fails
+     * Vulnerability: Information Leakage [5-1] using innerText vs innerHTML prevents injection of HTML/JS
+     */
+
     function renderGrid(heap, className = "", locked = true) {
         for (let idx = 0; idx < N * N; idx++) {
             const r = Math.floor(idx / N);

@@ -9,7 +9,7 @@
 
 
 /**
- * Author: Patrick Duffany, Zack Ahmed
+ * Author: Patrick Duffany
  * Description:  Console entry point: generate, display, solve, and display Sudoku puzzles
  * Return: int  0 on success; nonzero if memory allocation fails
  * Side-effects: prints to stdout; allocates and frees a Sudoku instance

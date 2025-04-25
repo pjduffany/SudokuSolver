@@ -9,6 +9,12 @@
 #include <time.h>
 #include "sudoku.h"
 
+/**
+ * Author: Patrick Duffany
+ * Description:  Deallocate a full Sudoku grid
+ * Param: sudoku  9x9 grid previously returned by setPuzzle()
+ * Side-effects: frees all malloc’d memory
+ */
 void freePuzzle(Square *** sudoku) {
     for (int row = 0; row < 9; row++) {
         for (int col = 0; col < 9; col++) {
@@ -18,8 +24,6 @@ void freePuzzle(Square *** sudoku) {
     }
     free(sudoku); // free top-level pointer
 }
-
-
 /**
  * Author: Patrick Duffany
  * Description:  Check a 3x3 box for the presence of a value.
@@ -47,7 +51,6 @@ int checkBox(Square *** sudoku, int row, int col, int val)
     }
     return 1;
 }
-
 
 /**
  * Author: Patrick Duffany
