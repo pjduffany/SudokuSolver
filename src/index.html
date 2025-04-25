@@ -142,7 +142,7 @@
 
       if (ptr !== null) mod._free(ptr);
       ptr = mod._malloc(81 * 4); // reallocate
-      heap = new Int32Array(mod.HEAP32.buffer, ptr, 81); // ✅ refresh view
+      heap = new Int32Array(mod.HEAP32.buffer, ptr, 81); // refresh view
       mod._generate_puzzle(ptr, difficulty);
       renderGrid(heap, "given", true);
       document.getElementById("solve").disabled = false; // reenable the solve button
