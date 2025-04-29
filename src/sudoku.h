@@ -1,8 +1,3 @@
-// sudoku.h
-//
-// Attribution:
-//   Primary Author: Patrick Duffany
-//
 
 #include <stdio.h>
 #include <stdlib.h>
